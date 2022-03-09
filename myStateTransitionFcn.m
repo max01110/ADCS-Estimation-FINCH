@@ -1,7 +1,12 @@
-function dstatedt = Satellite(t,state)
+function x = myStateTransitionFcn(state)
 %%genericState = [x0;y0;z0;xdot0;ydot0;zdot0;q0123_0;p0;q0;r0];
-global m invI I
-
+Ts = 0.1;
+%%%Moments of Inertia Cubesat
+Ix = 0.9;
+Iy = 0.9;
+Iz = 0.3;
+I = [Ix,0,0;0,Iy,0;0,0,Iz]; %%kg-m^2
+invI = inv(I);
 %%select states
 q0123 = state(1:4);
 p = state(5);
@@ -24,6 +29,5 @@ pqrdot = invI*(LMN - cross(pqr,H));
 dstatedt = [q0123dot;pqrdot];
 
 %%%Discretization (check this)
-%dt = 1; 
-%dstatedt_dis = state + dstatedt*dt;
+x = state + dstatedt.*Ts;
 end
