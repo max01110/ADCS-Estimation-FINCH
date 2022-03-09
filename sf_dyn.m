@@ -181,7 +181,7 @@ sys = x;
 %
 function sys=mdlGetTimeOfNextVarHit(t,x,u)
 
-sampleTime = 1;    %  Example, set the next hit to be one second later.
+sampleTime = 0.1;    %  Example, set the next hit to be one second later.
 sys = t + sampleTime;
 
 % end mdlGetTimeOfNextVarHit
