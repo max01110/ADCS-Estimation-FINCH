@@ -3,6 +3,16 @@ clear
 clc
 close all
 
+%%%Simulated noise parameters
+% Process noise covariance
+Q = 1e-7;
+p_noise = [Q;Q;Q;Q;Q;Q;Q];
+% Measurement noise covariance
+Re = 5e-6;
+m_noise = [Re;Re;Re;Re;0.0001*Re;0.0001*Re;0.0001*Re];
+% Sampling time
+Ts = 0.1; % [s] 
+
 %%%Get Earth Parameters for orbit
 planet
 
@@ -37,7 +47,7 @@ q0=0;
 r0=0;
 
 %Initial Conditions state vector
-stateinitial = [x0;y0;z0;xdot0;ydot0;zdot0;q0123_0;p0;q0;r0];
+stateinitial = [q0123_0;p0;q0;r0];
 
 %%%Orbit time parameters Circular Orbit
 period = 2*pi/sqrt(mu)*semi_major^(3/2); %%Tcircular
@@ -47,7 +57,7 @@ tspan = [0,tfinal];
 
 %%%This is where we integrate the equations of motion
 [tout,stateout] = ode45(@Satellite,tspan,stateinitial);
-
+%{
 %%%Convert state to kilometers
 stateout(:,1:6) = stateout(:,1:6)/1000;
 
@@ -55,9 +65,11 @@ stateout(:,1:6) = stateout(:,1:6)/1000;
 xout = stateout(:,1);
 yout = stateout(:,2);
 zout = stateout(:,3);
-q0123out = stateout(:,7:10);
+%}
+q0123out = stateout(:,1:4);
 ptpout = Quat2Eu(q0123out);
-pqrout = stateout(:,11:13);
+pqrout = stateout(:,5:7);
+%{
 %%%Make an Earth
 [X,Y,Z] = sphere(100);
 X = X*R/1000;
@@ -102,4 +114,5 @@ grid on
 xlabel('Time (sec)')
 ylabel('Angular Velocity (rad/s)')
 legend('p','q','r')
+%}
 
