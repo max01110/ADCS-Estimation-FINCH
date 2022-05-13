@@ -1,6 +1,6 @@
-function dstatedt = Satellite(t,state)
+function x = myStateTransition(state)
 %%genericState = [x0;y0;z0;xdot0;ydot0;zdot0;q0123_0;p0;q0;r0];
-global m invI I
+global m invI I Ts
 
 %%select states
 q0123 = state(1:4);
@@ -24,6 +24,5 @@ pqrdot = invI*(LMN - cross(pqr,H));
 dstatedt = [q0123dot;pqrdot];
 
 %%%Discretization (check this)
-%dt = 1; 
-%dstatedt_dis = state + dstatedt*dt;
+x = state + dstatedt*Ts;
 end
